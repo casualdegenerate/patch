@@ -9,6 +9,29 @@ for i, v in next, game:GetService("CoreGui"):WaitForChild("RobloxLoadingGui"):Ge
 	pcall(function()v.BackgroundTransparency = 0.7 end)
 end
 
+local function createFile(file)
+  local splits = file:split("/")
+  local dir = ""
+  local function func1(a,b)
+    a = a..b
+    if not isfile(a) then
+      makefolder(a)
+    end
+    return a
+  end
+  for i,v in pairs(splits) do
+    if i~=#splits and v:sub(-4) ~= ".txt" then
+      dir = func1(dir,v)
+      dir = dir.."/"
+    elseif v:sub(-4) ~= ".txt" then
+      dir = func1(dir,v)
+    else
+      writefile(dir..v,"")
+    end
+  end
+end
+
+
 -- / Panic function
 getgenv().a = function()
 	game:Shutdown()
@@ -748,7 +771,7 @@ threads["afk.lua"] = {
 
 ---[[Thumbnail
 threads["Watermark"] = {
-	["Active"] = true,
+	["Active"] = false,
 	["Thread"] = coroutine.create(function()
 		repeat wait() until game:IsLoaded()
 		repeat wait() until workspace:FindFirstChild("Camera")
@@ -1461,7 +1484,8 @@ threads["Kaderth's Admin House Custom Commands"] = {
 			rubberbandcf = camera.Focus
 		end
 		getgenv().rubber = true
-		getgenv().songs = readfile("cd/Config/Music.txt"):split("\n")
+--		if not isfolder('cd') then makefolder('cd') makefolder('cd/Config') end
+		getgenv().songs = {} --readfile("cd/Config/Music.txt"):split("\n")
 		getgenv().songsn = {}
 		getgenv().songinfo = {}
 		getgenv().hideme = false
@@ -3292,7 +3316,7 @@ threads["Kaderth's Admin House Custom Commands"] = {
 				end
 				playerschatted(player)
 			end)
-			local serverCache = isfile("cd/serverCache.txt") and readfile("cd/serverCache.txt"):split("\n") or {}
+			local serverCache = --[[isfile("cd/serverCache.txt") and readfile("cd/serverCache.txt"):split("\n") or]] {}
 			local sameServer
 			for i1, v1 in next, serverCache do
 				if v1:split("\t")[1] == game.JobId then
@@ -3995,7 +4019,7 @@ threads["Stay-Alive(macalads) Patch"] = {
 
 -- / This patch will just be stuff to help the client so turning FPS down if they are tabbed out, or not active for certain amount of time.
 threads["Roblox Patch"] = {
-	["Active"] = true,
+	["Active"] = false,
 	["Thread"] = coroutine.create(function()
 		local focusedfps = 165 --It's how much my monitor displays.
 		local unfocusedfps = 8
